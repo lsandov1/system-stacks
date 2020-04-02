@@ -6,8 +6,8 @@ add the required SW.
 
 
 ```bash
-$ STACK_IMAGE=clearlinux/stacks-mers
-$ BUNDLES=dev-utils
+$ DOCKER_IMAGE=clearlinux/stacks-mers
+$ EXTRA_BUNDLES=dev-utils
 
 $ cat > Dockerfile <<- EOF
 FROM clearlinux:latest AS bundles
@@ -16,10 +16,10 @@ RUN source /os-release && \\
     mkdir /install_root \\
     && swupd os-install -V \${VERSION_ID} \\
     --path /install_root --statedir /swupd-state \\
-    --bundles=$BUNDLES --no-boot-update \\
+    --bundles=$EXTRA_BUNDLES --no-boot-update \\
     && rm -rf /install_root/var/lib/swupd/*
 
-FROM $STACK_IMAGE:latest
+FROM $DOCKER_IMAGE
 USER 0
 COPY --from=bundles /install_root /
 EOF
